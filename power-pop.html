@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+<link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-fit-behavior/iron-fit-behavior.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../neon-animation/neon-animatable-behavior.html">
+<link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../neon-animation/animations/scale-down-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-in-animation.html">
+<link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+
+<!--
+`power-pop` provides a brief animation indicating success or error.
+
+### Usage
+```
+function pop(style) {
+  this.importHref(this.resolveUrl('power-pop.html'), () => {
+    let anim = document.createElement('power-pop');
+        anim.fitInto = this;
+        anim.positionTarget = this;
+        anim.notifyResize();
+    document.body.appendChild(anim);
+    anim.center();
+    anim.animate(style);
+    anim.refit();
+  });
+}
+
+pop('error');
+```
+### Styling
+`<power-loupe>` provides the following custom properties and mixins for styling:
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--icon-color` | The color of the icon |
+-->
+<dom-module id="power-pop">
+  <template>
+    <style>
+      iron-icon {
+        width: 100%;
+        height: 100%;
+        color: var(--icon-color);
+      }
+
+      #success {
+        color: var(--paper-green-500);
+      }
+
+      #error {
+        color: var(--paper-red-500);
+      }
+    </style>
+
+    <iron-iconset-svg name="icons" size="24">
+      <defs>
+        <g id="error">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </g>
+        <g id="success">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        </g>
+      </defs>
+    </iron-iconset-svg>
+
+    <iron-icon id="icon" icon="[[animation]]"></iron-icon>
+
+  </template>
+  <script>
+    Polymer({
+      is: 'power-pop',
+
+      properties: {
+        /**
+         * The name of the animation to run.
+         * @type {[type]}
+         */
+        animation: String,
+        animationConfig: {
+          value: function() {
+            return {
+              'entry': [{
+                name: 'fade-in-animation',
+                node: this.$.icon,
+                timing: {duration: 200, easeing: 'easein'},
+              }, {
+                name: 'scale-up-animation',
+                node: this.$.icon,
+                timing: {duration: 200, easeing: 'easein'},
+              }],
+              'exit': [{
+                name: 'fade-out-animation',
+                node: this.$.icon,
+                timing: {duration: 1000},
+              }, {
+                name: 'scale-down-animation',
+                node: this.$.icon,
+                timing: {duration: 1000},
+              }],
+            };
+          },
+        },
+        playing: {
+          type: Boolean,
+          value: false,
+        },
+      },
+
+      behaviors: [
+        Polymer.NeonAnimationRunnerBehavior,
+        Polymer.IronFitBehavior,
+        Polymer.IronResizableBehavior,
+      ],
+
+      listeners: {
+        'neon-animation-finish': '_onNeonAnimationFinish',
+      },
+
+      animate: function(animation) {
+        if (animation) { this.animation = animation; }
+        let color = this._getColor(this.animation);
+        this.updateStyles({'--icon-color': `var(--paper-${color}-500)`});
+        this.playAnimation('entry');
+        this.playing = true;
+      },
+
+      _getColor: function(animation) {
+        switch (animation) {
+          case 'error': return 'red';
+          default: return 'green';
+        }
+      },
+
+      _onNeonAnimationFinish: function(e) {
+        if (this.playing) {
+          this.playAnimation('exit');
+          this.playing = false;
+          return;
+        } else {
+          this.remove();
+        }
+      },
+    });
+  </script>
+</dom-module>
