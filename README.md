@@ -1,38 +1,28 @@
 # \<power-pop\>
 
-Shows a brief animation to indicate success or failure
+`power-pop` provides a brief animation indicating success or error.
 
-## Install the Polymer-CLI
+### Usage
 
-First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
+```js
+function pop(style) {
+  this.importHref(this.resolveUrl('power-pop.html'), () => {
+    let anim = document.createElement('power-pop');
+        anim.fitInto = this;
+        anim.positionTarget = this;
+        anim.notifyResize();
+    document.body.appendChild(anim);
+    anim.center();
+    anim.animate(style);
+    anim.refit();
+  });
+}
 
-## Viewing Your Application
-
+pop('error');
 ```
-$ polymer serve
-```
+### Styling
+`<power-pop>` provides the following custom properties and mixins for styling:
 
-## Building Your Application
-
-```
-$ polymer build
-```
-
-This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
-containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
-CSS, and JS optimizers.
-
-You can serve the built versions by giving `polymer serve` a folder to serve
-from:
-
-```
-$ polymer serve build/bundled
-```
-
-## Running Tests
-
-```
-$ polymer test
-```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+Custom property | Description | Default
+----------------|-------------|----------
+`--icon-color` | The color of the icon |
