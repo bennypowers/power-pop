@@ -15,18 +15,18 @@
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 
 <iron-iconset-svg name="icons" size="24">
-	<svg>
-		<defs>
-			<g id="error">
-				<path d="M0 0h24v24H0z" fill="none"></path>
-				<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
-			</g>
-			<g id="success">
-				<path d="M0 0h24v24H0z" fill="none"></path>
-				<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
-			</g>
-		</defs>
-	</svg>
+  <svg>
+    <defs>
+      <g id="error">
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
+      </g>
+      <g id="success">
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+      </g>
+    </defs>
+  </svg>
 </iron-iconset-svg>
 
 <!--
@@ -35,14 +35,14 @@
 ### Usage
 ```js
 function pop(type) {
-	let url = '../bower_components/power-pop/power-pop.html';
-	this.importHref(this.resolveUrl(url), () => {
-		let anim = document.createElement('power-pop');
-		this.appendChild(anim);
-		anim.animate(style);
-	});
+  let url = '../bower_components/power-pop/power-pop.html';
+  this.importHref(this.resolveUrl(url), () => {
+    let anim = document.createElement('power-pop');
+    this.appendChild(anim);
+    anim.animate(style);
+  });
 }
-	
+
 pop('error');
 ```
 ### Styling
@@ -76,19 +76,19 @@ Custom property | Description | Default
          */
         animation: String,
 
-				/**
-				 * The element to animate in	
-				 * @type {Element}
-				 */
-				target: {
-					type: Object,
-					observer: '_targetChanged',
-				},
+        /**
+         * The element to animate in
+         * @type {Element}
+         */
+        target: {
+          type: Object,
+          observer: '_targetChanged',
+        },
 
-				/**
-				 * Whether the animation is currently playing or not
-				 * @type {Boolean}
-				 */
+        /**
+         * Whether the animation is currently playing or not
+         * @type {Boolean}
+         */
         playing: {
           type: Boolean,
           value: false,
@@ -129,26 +129,26 @@ Custom property | Description | Default
       listeners: {
         'neon-animation-finish': '_onNeonAnimationFinish',
       },
-      
+
       attached: function() {
-        this.target = this.target || this.parentElement;
+        this.target = this.target || this.parentNode;
       },
 
       animate: function(animation) {
         if (animation) { this.animation = animation; }
-				this.notifyResize();
-				this.center();
-				this.refit();
+        this.center();
+        this.refit();
         var color = this._getColor(this.animation);
         this.updateStyles({'--icon-color': 'var(--paper-' + color + '-500)'});
         this.playAnimation('entry');
         this.playing = true;
       },
 
-			_targetChanged: function(target) {
-				this.fitInto = target;
-				this.positionTarget = target;
-			},
+      _targetChanged: function(target) {
+        this.fitInto = target;
+        this.positionTarget = target;
+        this.notifyResize();
+      },
 
       _getColor: function(animation) {
         switch (animation) {
