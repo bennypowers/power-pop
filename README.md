@@ -6,15 +6,12 @@
 
 ```js
 function pop(style) {
-  this.importHref(this.resolveUrl('power-pop.html'), () => {
+  let url = '../../bower_components/power-pop/power-pop.html';
+  this.importHref(this.resolveUrl(url), () => {
     let anim = document.createElement('power-pop');
-        anim.fitInto = this;
-        anim.positionTarget = this;
-        anim.notifyResize();
+        anim.target = this;
     document.body.appendChild(anim);
-    anim.center();
     anim.animate(style);
-    anim.refit();
   });
 }
 
