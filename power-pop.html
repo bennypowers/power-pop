@@ -14,37 +14,35 @@
 <link rel="import" href="../neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
 
-<iron-iconset-svg name="pop" size="100">
-  <defs>
-    <g id="error">
-      <path d="M0 0h24v24H0z" fill="none"></path>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
-    </g>
-    <g id="success">
-      <path d="M0 0h24v24H0z" fill="none"></path>
-      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
-    </g>
-  </defs>
+<iron-iconset-svg name="icons" size="24">
+	<svg>
+		<defs>
+			<g id="error">
+				<path d="M0 0h24v24H0z" fill="none"></path>
+				<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
+			</g>
+			<g id="success">
+				<path d="M0 0h24v24H0z" fill="none"></path>
+				<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+			</g>
+		</defs>
+	</svg>
 </iron-iconset-svg>
 
 <!--
 `power-pop` provides a brief animation indicating success or error.
 
 ### Usage
-```
-function pop(style) {
-  this.importHref(this.resolveUrl('power-pop.html'), () => {
-    let anim = document.createElement('power-pop');
-        anim.fitInto = this;
-        anim.positionTarget = this;
-        anim.notifyResize();
-    document.body.appendChild(anim);
-    anim.center();
-    anim.animate(style);
-    anim.refit();
-  });
+```js
+function pop(type) {
+	let url = '../bower_components/power-pop/power-pop.html';
+	this.importHref(this.resolveUrl(url), () => {
+		let anim = document.createElement('power-pop');
+		this.appendChild(anim);
+		anim.animate(style);
+	});
 }
-
+	
 pop('error');
 ```
 ### Styling
@@ -64,7 +62,7 @@ Custom property | Description | Default
       }
     </style>
 
-    <iron-icon id="icon" icon="pop:[[animation]]"></iron-icon>
+    <iron-icon id="icon" icon="[[animation]]"></iron-icon>
 
   </template>
   <script>
@@ -74,9 +72,28 @@ Custom property | Description | Default
       properties: {
         /**
          * The name of the animation to run.
-         * @type {[type]}
+         * @type {String}
          */
         animation: String,
+
+				/**
+				 * The element to animate in	
+				 * @type {Element}
+				 */
+				target: {
+					type: Object,
+					observer: '_targetChanged',
+				},
+
+				/**
+				 * Whether the animation is currently playing or not
+				 * @type {Boolean}
+				 */
+        playing: {
+          type: Boolean,
+          value: false,
+        },
+
         animationConfig: {
           value: function() {
             return {
@@ -101,10 +118,6 @@ Custom property | Description | Default
             };
           },
         },
-        playing: {
-          type: Boolean,
-          value: false,
-        },
       },
 
       behaviors: [
@@ -116,14 +129,26 @@ Custom property | Description | Default
       listeners: {
         'neon-animation-finish': '_onNeonAnimationFinish',
       },
+      
+      attached: function() {
+        this.target = this.target || this.parentElement;
+      },
 
       animate: function(animation) {
         if (animation) { this.animation = animation; }
+				this.notifyResize();
+				this.center();
+				this.refit();
         var color = this._getColor(this.animation);
         this.updateStyles({'--icon-color': 'var(--paper-' + color + '-500)'});
         this.playAnimation('entry');
         this.playing = true;
       },
+
+			_targetChanged: function(target) {
+				this.fitInto = target;
+				this.positionTarget = target;
+			},
 
       _getColor: function(animation) {
         switch (animation) {
