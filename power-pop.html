@@ -5,6 +5,7 @@
 <link rel="import" href="../iron-iconset-svg/iron-iconset-svg.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-fit-behavior/iron-fit-behavior.html">
+<link rel="import" href="../iron-fit-behavior/iron-fit-behavior.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../neon-animation/neon-animatable-behavior.html">
 <link rel="import" href="../neon-animation/neon-animation-runner-behavior.html">
@@ -12,6 +13,19 @@
 <link rel="import" href="../neon-animation/animations/scale-down-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-in-animation.html">
 <link rel="import" href="../neon-animation/animations/fade-out-animation.html">
+
+<iron-iconset-svg name="pop" size="100">
+  <defs>
+    <g id="error">
+      <path d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
+    </g>
+    <g id="success">
+      <path d="M0 0h24v24H0z" fill="none"></path>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+    </g>
+  </defs>
+</iron-iconset-svg>
 
 <!--
 `power-pop` provides a brief animation indicating success or error.
@@ -48,30 +62,9 @@ Custom property | Description | Default
         height: 100%;
         color: var(--icon-color);
       }
-
-      #success {
-        color: var(--paper-green-500);
-      }
-
-      #error {
-        color: var(--paper-red-500);
-      }
     </style>
 
-    <iron-iconset-svg name="icons" size="24">
-      <defs>
-        <g id="error">
-          <path d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-        </g>
-        <g id="success">
-          <path d="M0 0h24v24H0z" fill="none"/>
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-        </g>
-      </defs>
-    </iron-iconset-svg>
-
-    <iron-icon id="icon" icon="[[animation]]"></iron-icon>
+    <iron-icon id="icon" icon="pop:[[animation]]"></iron-icon>
 
   </template>
   <script>
@@ -126,8 +119,8 @@ Custom property | Description | Default
 
       animate: function(animation) {
         if (animation) { this.animation = animation; }
-        let color = this._getColor(this.animation);
-        this.updateStyles({'--icon-color': `var(--paper-${color}-500)`});
+        var color = this._getColor(this.animation);
+        this.updateStyles({'--icon-color': 'var(--paper-' + color + '-500)'});
         this.playAnimation('entry');
         this.playing = true;
       },
