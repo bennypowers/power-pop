@@ -10,7 +10,8 @@
     "iron-fit-behavior": "PolymerElements/iron-fit-behavior#^1.2.6",
     "iron-icon": "PolymerElements/iron-icon#^1.0.12",
     "iron-iconset-svg": "PolymerElements/iron-iconset-svg#^1.1.0",
-    "neon-animation": "PolymerElements/neon-animation#^1.2.4"
+    "neon-animation": "PolymerElements/neon-animation#^1.2.4",
+    "paper-styles": "PolymerElements/paper-styles#^1.2.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
