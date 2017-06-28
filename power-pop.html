@@ -144,6 +144,7 @@ Custom property | Description | Default
         this.updateStyles({'--icon-color': 'var(--paper-' + color + '-500)'});
         this.playAnimation('entry');
         this.playing = true;
+        this.dispatchEvent(new CustomEvent('power-pop', {bubbles: true, composed: true}));
       },
 
       _targetChanged: function(target) {
