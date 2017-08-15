@@ -41,7 +41,7 @@ function pop(type) {
     let anim = document.createElement('power-pop');
         anim.target = this;
     document.body.appendChild(anim);
-    anim.animate(style);
+    anim.animatePop(style);
   });
 }
 
@@ -74,9 +74,11 @@ Custom property | Description | Default
       properties: {
         /**
          * The name of the animation to run.
-         * @type {String}
          */
-        animation: String,
+        animation: {
+          type: String,
+          value: 'success',
+        },
 
         /**
          * The element to animate in
@@ -136,15 +138,19 @@ Custom property | Description | Default
         this.target = this.target || this.parentNode;
       },
 
-      animate: function(animation) {
-        if (animation) { this.animation = animation; }
+      animatePop: function(animation) {
+        this.animation = animation || this.animation;
         this.center();
         this.refit();
         var color = this._getColor(this.animation);
         this.updateStyles({'--icon-color': 'var(--paper-' + color + '-500)'});
         this.playAnimation('entry');
         this.playing = true;
-        this.dispatchEvent(new CustomEvent('power-pop', {bubbles: true, composed: true}));
+        const bubbles = true;
+        const composed = true;
+        const detail = this.animation;
+        const options = {bubbles, composed, detail};
+        this.dispatchEvent(new CustomEvent('power-pop', options));
       },
 
       _targetChanged: function(target) {
